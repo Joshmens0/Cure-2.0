@@ -14,7 +14,7 @@ Overall, the medical AI assistant's purpose is to enhance access to reliable med
 
 
 The setup for the app can be accessed through the link below.
-Link: https://drive.google.com/file/d/1edpgywT_HDhZlxRpsoqrh3djHhJ5Xk73/view?usp=sharing
+https://drive.google.com/file/d/13uOk_h-V6yDP1S1SFbji48CKRfZ2_rI9/view?usp=drive_link
 
 Inorder to run the app please follow these steps:
 
