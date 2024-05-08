@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>D:\Users\julth\repos\Cure 2.0\Cure 2.0\Properties\PublishProfiles\ClickOnceProfile1.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="InputDisplayTemplate.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="InputRequest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LoadingScreen.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="OutputDisplayTemplate.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SendRequestBtn.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="InputDisplayTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="InputRequest.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="LoadingScreen.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="OutputDisplayTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SendRequestBtn.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

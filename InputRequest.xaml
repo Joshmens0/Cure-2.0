@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Cure_2._0.InputRequest"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Cure_2._0"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="800">
+    <Grid Height="50">
+        <TextBox x:Name="input" x:FieldModifier="public"
+            FontFamily="Monospace" FontSize="20" FontWeight="Light"
+            FontStyle="Italic"
+            VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+            BorderThickness="0" Background="#181a1a"
+            Foreground="White" Margin="5" Padding="5"
+            Text="Send A Message" MouseDown="input_MouseDown" Focusable="False" />
+    </Grid>
+</UserControl>

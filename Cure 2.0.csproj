@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>Cure_2._0</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Images\**" />
+    <Page Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="bot.jpeg" />
+    <None Remove="Copied.png" />
+    <None Remove="Copy.png" />
+    <None Remove="MessageSent.wav" />
+    <None Remove="send.jpeg" />
+    <None Remove="Sounds\MessageRecieved.wav" />
+    <None Remove="Sounds\MessageSent.wav" />
+    <None Remove="user.jpeg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenAI" Version="1.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="bot.jpeg" />
+    <Resource Include="Copy.png" />
+    <Resource Include="icons\icon.png" />
+    <Resource Include="loadingscreen.png" />
+    <Resource Include="send.jpeg" />
+    <Resource Include="Sounds\MessageRecieved.wav" />
+    <Resource Include="Sounds\MessageSent.wav" />
+    <Resource Include="user.jpeg" />
+  </ItemGroup>
+
+</Project>
