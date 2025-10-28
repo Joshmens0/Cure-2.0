@@ -31,7 +31,11 @@ namespace Cure_WPF
         {
             ImageGenerationRequest request = new ImageGenerationRequest() {Prompt=$"generate health images based on: {ImagePrompt}" };
             var image=await openai.ImageGenerations.CreateImageAsync(request);
-            return image.ToString();
+            if (image.Data.Count > 0)
+            {
+                return image.Data[0].Url;
+            }
+            return null;
         }
 
     }
