@@ -1,45 +1,81 @@
-using Newtonsoft.Json;
-using System.IO;
+using System;
+using System.Threading.Tasks;
+using Windows.Services.Store;
 
 namespace Cure_2._0
 {
     public class PremiumService
     {
-        private const string PremiumFile = "premium.json";
+        private const string ProductId = "CureAI_Premium_Unlock"; // Replace with your actual Product ID
+        private StoreContext storeContext = null;
 
         public bool IsPremium { get; private set; }
 
         public PremiumService()
         {
-            LoadPremiumStatus();
+            Initialize();
         }
 
-        public void UnlockPremium()
+        private async void Initialize()
         {
-            IsPremium = true;
-            SavePremiumStatus();
+            storeContext = StoreContext.GetDefault();
+            await CheckPremiumStatus();
         }
 
-        private void LoadPremiumStatus()
+        private async Task CheckPremiumStatus()
         {
-            if (File.Exists(PremiumFile))
+            if (storeContext == null)
             {
-                var json = File.ReadAllText(PremiumFile);
-                var data = JsonConvert.DeserializeObject<PremiumData>(json);
-                IsPremium = data.IsPremium;
+                IsPremium = false;
+                return;
             }
+
+            StoreAppLicense appLicense = await storeContext.GetAppLicenseAsync();
+            if (appLicense == null)
+            {
+                IsPremium = false;
+                return;
+            }
+
+            foreach (var addonLicense in appLicense.AddOnLicenses)
+            {
+                if (addonLicense.Value.SkuStoreId.StartsWith(ProductId) && addonLicense.Value.IsActive)
+                {
+                    IsPremium = true;
+                    return;
+                }
+            }
+
+            IsPremium = false;
         }
 
-        private void SavePremiumStatus()
+        public async Task<bool> PurchasePremium()
         {
-            var data = new PremiumData { IsPremium = this.IsPremium };
-            var json = JsonConvert.SerializeObject(data, Formatting.Indented);
-            File.WriteAllText(PremiumFile, json);
-        }
+            if (storeContext == null)
+            {
+                return false;
+            }
 
-        private class PremiumData
-        {
-            public bool IsPremium { get; set; }
+            StorePurchaseResult result = await storeContext.RequestPurchaseAsync(ProductId);
+
+            if (result.ExtendedError != null)
+            {
+                return false;
+            }
+
+            switch (result.Status)
+            {
+                case StorePurchaseStatus.Succeeded:
+                    IsPremium = true;
+                    return true;
+
+                case StorePurchaseStatus.AlreadyPurchased:
+                    IsPremium = true;
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }

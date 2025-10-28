@@ -32,8 +32,14 @@ namespace Cure_2._0
             {
                 if (UpgradePrompt.Show())
                 {
-                    premiumService.UnlockPremium();
-                    MessageBox.Show("Congratulations! You've unlocked unlimited access.", "Upgrade Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (await premiumService.PurchasePremium())
+                    {
+                        MessageBox.Show("Congratulations! You've unlocked unlimited access. Please restart the application to apply the changes.", "Upgrade Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("The purchase could not be completed. Please try again later.", "Purchase Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 return;
             }
