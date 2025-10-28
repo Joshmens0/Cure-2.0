@@ -32,6 +32,8 @@ namespace Cure_2._0
         private readonly SpeechSynthesizer synthesizer = new SpeechSynthesizer();
         private List<ChatMessage> chatHistory = new List<ChatMessage>();
         private const string ChatHistoryFile = "chathistory.json";
+        private UsageTracker usageTracker = new UsageTracker();
+        private PremiumService premiumService = new PremiumService();
 
         public MainWindow()
         {
@@ -86,6 +88,21 @@ namespace Cure_2._0
             if (string.IsNullOrWhiteSpace(UserRequest.input.Text) || UserRequest.input.Text == "Send A Message")
             {
                 return;
+            }
+
+            if (!premiumService.IsPremium && usageTracker.IsChatLimitReached())
+            {
+                if (UpgradePrompt.Show())
+                {
+                    premiumService.UnlockPremium();
+                    MessageBox.Show("Congratulations! You've unlocked unlimited access.", "Upgrade Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                return;
+            }
+
+            if (!premiumService.IsPremium)
+            {
+                usageTracker.IncrementChatMessageCount();
             }
 
             InputDisplayTemplate inputDisplay = new InputDisplayTemplate();

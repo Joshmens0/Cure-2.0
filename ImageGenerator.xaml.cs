@@ -12,6 +12,9 @@ namespace Cure_2._0
     /// </summary>
     public partial class ImageGenerator : UserControl
     {
+        private UsageTracker usageTracker = new UsageTracker();
+        private PremiumService premiumService = new PremiumService();
+
         public ImageGenerator()
         {
             InitializeComponent();
@@ -23,6 +26,21 @@ namespace Cure_2._0
             {
                 MessageBox.Show("Please enter a prompt for the image.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
+
+            if (!premiumService.IsPremium && usageTracker.IsImageLimitReached())
+            {
+                if (UpgradePrompt.Show())
+                {
+                    premiumService.UnlockPremium();
+                    MessageBox.Show("Congratulations! You've unlocked unlimited access.", "Upgrade Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                return;
+            }
+
+            if (!premiumService.IsPremium)
+            {
+                usageTracker.IncrementImageGenerationCount();
             }
 
             loading.Visibility = Visibility.Visible;
