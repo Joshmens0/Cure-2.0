@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +13,8 @@ namespace Cure_WPF
 {
     internal class Openai
     {
-        public static string apikey = "sk-proj-qo71ZyOS2ra4UkO6hWDqT3BlbkFJ3tdAK2PM6YFg9vdVIU4n";
-        public static OpenAIAPI openai = new OpenAIAPI(apikey);
+
+        public static OpenAIAPI openai = new OpenAIAPI(Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
         public static OpenAI_API.Chat.Conversation chatgpt = openai.Chat.CreateConversation();
         public string SystemMessage { get; set; }
         public string UserRequest {  get; set; }
@@ -33,6 +33,6 @@ namespace Cure_WPF
             var image=await openai.ImageGenerations.CreateImageAsync(request);
             return image.ToString();
         }
-       
+
     }
 }
