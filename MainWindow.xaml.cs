@@ -1,6 +1,8 @@
 using Cure_WPF;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Reflection;
@@ -28,15 +30,21 @@ namespace Cure_2._0
     public partial class MainWindow : Window
     {
         private readonly SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+        private List<ChatMessage> chatHistory = new List<ChatMessage>();
+        private const string ChatHistoryFile = "chathistory.json";
 
         public MainWindow()
         {
             InitializeComponent();
             UserRequest.SendButtonClick += UserRequest_SendButtonClick;
+            LoadChatHistory();
         }
 
         async Task OpenAiLogic()
         {
+            var userMessage = new ChatMessage { Sender = "User", Content = UserRequest.input.Text };
+            chatHistory.Add(userMessage);
+
             Openai openai = new Openai()
             {
              SystemMessage= "you are a highly renowned medical doctor who gives diagnosis and treament to all diseases",
@@ -50,6 +58,10 @@ namespace Cure_2._0
                 string responseText = await openai.MakeRequest();
                 if (!string.IsNullOrEmpty(responseText))
                 {
+                    var aiMessage = new ChatMessage { Sender = "AI", Content = responseText };
+                    chatHistory.Add(aiMessage);
+                    SaveChatHistory();
+
                     response.DisplayResponse.Text = responseText;
                     this.dock.Children.Add(response);
                     synthesizer.SpeakAsync(responseText);
@@ -97,6 +109,37 @@ namespace Cure_2._0
         private void UserRequest_SendButtonClick(object sender, RoutedEventArgs e)
         {
             SendMessage();
+        }
+
+        private void SaveChatHistory()
+        {
+            string json = JsonConvert.SerializeObject(chatHistory, Formatting.Indented);
+            File.WriteAllText(ChatHistoryFile, json);
+        }
+
+        private void LoadChatHistory()
+        {
+            if (File.Exists(ChatHistoryFile))
+            {
+                string json = File.ReadAllText(ChatHistoryFile);
+                chatHistory = JsonConvert.DeserializeObject<List<ChatMessage>>(json);
+
+                foreach (var message in chatHistory)
+                {
+                    if (message.Sender == "User")
+                    {
+                        InputDisplayTemplate inputDisplay = new InputDisplayTemplate();
+                        inputDisplay.DisplayUserInput.Text = message.Content;
+                        this.dock.Children.Add(inputDisplay);
+                    }
+                    else if (message.Sender == "AI")
+                    {
+                        OutputDisplayTemplate outputDisplay = new OutputDisplayTemplate();
+                        outputDisplay.DisplayResponse.Text = message.Content;
+                        this.dock.Children.Add(outputDisplay);
+                    }
+                }
+            }
         }
     }
 }
