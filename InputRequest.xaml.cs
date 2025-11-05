@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,16 @@ namespace Cure_2._0
     /// </summary>
     public partial class InputRequest : UserControl
     {
+        public static readonly RoutedEvent SendButtonClickEvent =
+            EventManager.RegisterRoutedEvent("SendButtonClick", RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler), typeof(InputRequest));
+
+        public event RoutedEventHandler SendButtonClick
+        {
+            add { AddHandler(SendButtonClickEvent, value); }
+            remove { RemoveHandler(SendButtonClickEvent, value); }
+        }
+
         public InputRequest()
         {
             InitializeComponent();
@@ -27,16 +37,39 @@ namespace Cure_2._0
 
         private void input_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed && this.input.Text!=null) 
+            if (e.LeftButton == MouseButtonState.Pressed && this.input.Text == "Send A Message")
             {
-                this.input.Text = null;
+                this.input.Text = "";
                 this.input.Focusable = true;
-                this.input.Focus(); 
-                this.input.FontStyle=  FontStyles.Normal;
-                this.input.FontWeight = FontWeights.Bold;
+                this.input.Focus();
+                this.input.FontStyle = FontStyles.Normal;
+                this.input.FontWeight = FontWeights.Normal;
             }
-            
         }
 
+        private void input_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (this.input.Text == "Send A Message")
+            {
+                this.input.Text = "";
+                this.input.FontStyle = FontStyles.Normal;
+                this.input.FontWeight = FontWeights.Normal;
+            }
+        }
+
+        private void input_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(this.input.Text))
+            {
+                this.input.Text = "Send A Message";
+                this.input.FontStyle = FontStyles.Italic;
+                this.input.FontWeight = FontWeights.Light;
+            }
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new RoutedEventArgs(SendButtonClickEvent));
+        }
     }
 }
